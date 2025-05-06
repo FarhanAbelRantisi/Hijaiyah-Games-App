@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'tebak_huruf_controller.dart';
+import '../../../viewmodel/tebak_huruf_viewmodel.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import '../../screens/result_screen.dart';
+import '../../../../view/screens/result_screen.dart';
 
 
 
@@ -17,14 +17,14 @@ class TebakHurufGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => TebakHurufController(),
+      create: (_) => TebakHurufViewmodel(),
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(170, 219, 233, 1),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Center(
-              child: Consumer<TebakHurufController>(
+              child: Consumer<TebakHurufViewmodel>(
                 builder: (context, controller, _) {
                   final question = controller.currentQuestion;
                   final FlutterTts flutterTts = FlutterTts();
@@ -199,18 +199,24 @@ class TebakHurufGame extends StatelessWidget {
                                     controller.notifyListeners();
                                   } else {
                                     controller.isFinished = true;
-                                    // Navigasi ke ResultScreen
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ResultScreen(
-                                          score: controller.score,
-                                          totalQuestions: controller.questions.length,
-                                          benar: controller.correctAnswers,
-                                          // tambahkan jika ada data lain
+                                    Future.delayed(Duration(milliseconds: 100), () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ResultScreen(
+                                            score: controller.score,
+                                            totalQuestions: controller.questions.length,
+                                            benar: controller.correctAnswers,
+                                            onRetry: () {
+                                              Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(builder: (_) => const TebakHurufGame()),
+                                              );
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    });
                                   }
                                 }
                               : null, // Disable jika belum dijawab
@@ -246,7 +252,7 @@ class TebakHurufGame extends StatelessWidget {
 
   Widget _buildOption(
     BuildContext context,
-    TebakHurufController controller,
+    TebakHurufViewmodel controller,
     String option, {
     required int index,
   }) {

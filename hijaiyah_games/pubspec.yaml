@@ -62,6 +62,15 @@ flutter:
           weight: 600
         - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
+  assets:
+    - assets/images/icon_result.png
+    - assets/images/icon_tebak_huruf.png
+    - assets/images/icon_susun_huruf.png
+    - assets/images/icon_piala.png
+    - assets/images/image_profile.png
+    - assets/images/icon_line1.png
+    - assets/images/icon_line2.png
+    - assets/images/icon_tajwidku_seru.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

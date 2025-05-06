@@ -4,12 +4,14 @@ class ResultScreen extends StatelessWidget {
   final int score;
   final int benar;
   final int totalQuestions;
+  final VoidCallback onRetry;
 
   const ResultScreen({
     super.key,
     required this.score,
     required this.benar,
     required this.totalQuestions,
+    required this.onRetry,
   });
 
   @override
@@ -23,7 +25,6 @@ class ResultScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Atas: Icon - Selamat - Icon
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -41,9 +42,7 @@ class ResultScreen extends StatelessWidget {
                     Image.asset('assets/images/icon_result.png'),
                   ],
                 ),
-
-                const SizedBox(height: 14),
-
+                const SizedBox(height: 20),
                 const Text(
                   'Kamu sudah menyelesaikan\nseluruh kuis tebak huruf\nhijaiyah!',
                   textAlign: TextAlign.center,
@@ -53,9 +52,7 @@ class ResultScreen extends StatelessWidget {
                     fontSize: 20,
                   ),
                 ),
-
-                const SizedBox(height: 12),
-
+                const SizedBox(height: 24),
                 Text(
                   'Total Poin yang didapat: $score pts',
                   style: const TextStyle(
@@ -64,9 +61,7 @@ class ResultScreen extends StatelessWidget {
                     fontSize: 20,
                   ),
                 ),
-
-                const SizedBox(height: 12),
-
+                const SizedBox(height: 24),
                 Container(
                   width: 337,
                   height: 69,
@@ -84,9 +79,7 @@ class ResultScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                const SizedBox(height: 12),
-
+                const SizedBox(height: 20),
                 const Text(
                   'Hebat Banget, Semangat terus\nuntuk kuis kuis selanjutnya ya!',
                   textAlign: TextAlign.center,
@@ -95,9 +88,7 @@ class ResultScreen extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-
-                const SizedBox(height: 12),
-
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -112,9 +103,7 @@ class ResultScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.pop(context); // Kembali ke soal awal
-                        },
+                        onPressed: onRetry,
                         child: const Text(
                           'Ulangi Kuis',
                           style: TextStyle(
@@ -126,9 +115,7 @@ class ResultScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     const SizedBox(width: 12),
-
                     // Button "Menu Utama"
                     SizedBox(
                       width: 163,

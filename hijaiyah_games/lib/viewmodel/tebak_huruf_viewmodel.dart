@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../models/question_model.dart';
-import '../../../data/tebak_huruf_questions.dart';
+import '../../models/question_model.dart';
+import '../../data/tebak_huruf_questions.dart';
 
-class TebakHurufController extends ChangeNotifier {
+class TebakHurufViewmodel extends ChangeNotifier {
   int currentIndex = 0;
   int score = 0;
   int correctAnswers = 0;
