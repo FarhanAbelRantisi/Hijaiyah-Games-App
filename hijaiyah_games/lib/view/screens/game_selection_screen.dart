@@ -11,7 +11,7 @@ class GameSelectionScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(170, 219, 233, 1),
       body: SafeArea(
-        child: SingleChildScrollView( // Tambahkan scroll
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Column(

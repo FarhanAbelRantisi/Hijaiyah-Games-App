@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../viewmodel/susun_huruf_viewmodel.dart';
+import '../../../../viewmodel/susun_huruf_viewmodel.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import '../../../../view/screens/result_screen.dart';
+import '../../../../../view/screens/result_screen.dart';
 
 class SusunHurufGame extends StatelessWidget {
   const SusunHurufGame({super.key});

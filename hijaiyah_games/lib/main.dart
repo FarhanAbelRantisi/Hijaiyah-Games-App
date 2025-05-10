@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hijaiyah_games/view/screens/games/susun_huruf_game.dart';
 import '../view/screens/game_selection_screen.dart';
-import 'view/screens/games/tebak_huruf_game.dart';
 
 void main() {
   runApp(const MyApp());
