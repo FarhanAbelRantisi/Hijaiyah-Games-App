@@ -9,17 +9,20 @@ class SusunHurufGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    const horizontalPadding = 24.0;
+    final containerWidth = screenWidth - 2 * horizontalPadding;
+
     return ChangeNotifierProvider(
       create: (_) => SusunHurufViewmodel(),
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(170, 219, 233, 1),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
             child: Center(
               child: Consumer<SusunHurufViewmodel>(
                 builder: (context, controller, _) {
-
                   final question = controller.currentQuestion;
                   final FlutterTts flutterTts = FlutterTts();
 
@@ -49,6 +52,7 @@ class SusunHurufGame extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        width: containerWidth,
                         height: 570,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -81,7 +85,7 @@ class SusunHurufGame extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.only(left: 22),
                                   alignment: Alignment.centerLeft,
-                                  width: 230,
+                                  width: containerWidth * 0.65,
                                   height: 95,
                                   decoration: BoxDecoration(
                                     color: const Color.fromARGB(255, 165, 214, 167),
@@ -100,7 +104,7 @@ class SusunHurufGame extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   alignment: Alignment.center,
-                                  width: 88,
+                                  width: containerWidth * 0.25,
                                   height: 95,
                                   decoration: BoxDecoration(
                                     color: const Color.fromARGB(255, 165, 214, 167),
@@ -120,7 +124,7 @@ class SusunHurufGame extends StatelessWidget {
                             const SizedBox(height: 14),
                             Row(
                               children: [
-                                const SizedBox(width: 143),
+                                SizedBox(width: containerWidth * 0.45),
                                 Align(
                                   alignment: Alignment.center,
                                   child: Container(
@@ -138,9 +142,7 @@ class SusunHurufGame extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-
                                 const Spacer(),
-                                
                                 Align(
                                   alignment: Alignment.bottomRight,
                                   child: IconButton(
@@ -173,12 +175,15 @@ class SusunHurufGame extends StatelessWidget {
                                         : const Color.fromRGBO(242, 125, 125, 1);
                                   }
 
+                                  // Calculate maxWidth for answer tiles
+                                  final maxTileWidth = (containerWidth - (question.correctAnswer.length) * 16) / 4;
+
                                   return Padding(
                                     padding: const EdgeInsets.only(left: 0),
                                     child: Row(
                                       children: [
                                         Container(
-                                          width: 74,
+                                          constraints: BoxConstraints(maxWidth: maxTileWidth),
                                           height: 74,
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
@@ -190,16 +195,14 @@ class SusunHurufGame extends StatelessWidget {
                                             style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
                                           ),
                                         ),
-                                        if (index < question.correctAnswer.length - 1) const SizedBox(width: 13),
+                                        if (index < question.correctAnswer.length - 1) const SizedBox(width: 12),
                                       ],
                                     ),
                                   );
                                 },
                               ),
                             ),
-
                             const SizedBox(height: 16),
-
                             const Text(
                               'Huruf Acak',
                               style: TextStyle(
@@ -210,7 +213,7 @@ class SusunHurufGame extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Wrap(
-                              spacing: 13,
+                              spacing: 12,
                               runSpacing: 10,
                               children: List.generate(
                                 question.options.length,
@@ -219,17 +222,17 @@ class SusunHurufGame extends StatelessWidget {
                                   controller,
                                   question.options[index],
                                   index,
+                                  maxWidth: (containerWidth - 4 * 16) / 4, // 4 options, 3 gaps
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-
                       Container(
                         padding: const EdgeInsets.only(top: 20, bottom: 12, left: 14, right: 14),
+                        width: containerWidth,
                         height: 150,
-                        width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           color: controller.isAnswerComplete
                               ? (controller.isCurrentAnswerCorrect
@@ -238,10 +241,9 @@ class SusunHurufGame extends StatelessWidget {
                               : Colors.white,
                           borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(15),
-                            bottomRight: Radius.circular(15)
-                            ),
+                            bottomRight: Radius.circular(15),
+                          ),
                         ),
-
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -260,9 +262,7 @@ class SusunHurufGame extends StatelessWidget {
                                   ),
                                 ),
                               ),
-
                             const Spacer(),
-
                             SizedBox(
                               width: double.infinity,
                               height: 50,
@@ -311,7 +311,13 @@ class SusunHurufGame extends StatelessWidget {
     await tts.speak(text);
   }
 
-  Widget _buildLetterOption(BuildContext context, SusunHurufViewmodel controller, String letter, int index) {
+  Widget _buildLetterOption(
+    BuildContext context,
+    SusunHurufViewmodel controller,
+    String letter,
+    int index, {
+    required double maxWidth,
+  }) {
     bool alreadyUsed = controller.usedIndices.contains(index);
     return GestureDetector(
       onTap: alreadyUsed
@@ -320,7 +326,7 @@ class SusunHurufGame extends StatelessWidget {
               controller.addLetter(letter, index);
             },
       child: Container(
-        width: 74,
+        constraints: BoxConstraints(maxWidth: maxWidth),
         height: 74,
         alignment: Alignment.center,
         decoration: BoxDecoration(

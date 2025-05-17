@@ -16,21 +16,27 @@ class TebakHurufGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    const horizontalPadding = 24.0;
+
     return ChangeNotifierProvider(
       create: (_) => TebakHurufViewmodel(),
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(170, 219, 233, 1),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
             child: Center(
               child: Consumer<TebakHurufViewmodel>(
                 builder: (context, controller, _) {
                   final question = controller.currentQuestion;
                   final FlutterTts flutterTts = FlutterTts();
 
+                  final containerWidth = screenWidth - 2 * horizontalPadding;
+
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    width: containerWidth,
                     height: 639,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -48,67 +54,67 @@ class TebakHurufGame extends StatelessWidget {
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 4),
-
                         Text(
                           'Soal ${controller.currentIndex + 1} dari 10',
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-
                         const SizedBox(height: 20),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              alignment: Alignment.center,
-                              width: 230,
-                              height: 95,
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 165, 214, 167),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Text(
-                                question.text,
-                                maxLines: 2,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
+                            Expanded(
+                              flex: 7,
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                alignment: Alignment.center,
+                                height: 95,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(255, 165, 214, 167),
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
-                                textAlign: TextAlign.start,
+                                child: Text(
+                                  question.text,
+                                  maxLines: 2,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              alignment: Alignment.center,
-                              width: 88,
-                              height: 95,
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 165, 214, 167),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Text(
-                                question.word,
-                                style: TextStyle(
-                                  fontSize: isArabic(question.word) ? 40 : 20,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600,
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                alignment: Alignment.center,
+                                height: 95,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(255, 165, 214, 167),
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
-                                textAlign: TextAlign.center,
+                                child: Text(
+                                  question.word,
+                                  style: TextStyle(
+                                    fontSize: isArabic(question.word) ? 40 : 20,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             ),
                           ],
                         ),
 
                         const SizedBox(height: 14),
-                        
+
                         Container(
                           width: 50,
                           height: 50,
@@ -131,31 +137,31 @@ class TebakHurufGame extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                _buildOption(context, controller, question.options[0], index: 0),
-
+                                Expanded(
+                                  child: _buildOption(context, controller, question.options[0], index: 0, maxWidth: (containerWidth - 8) / 2),
+                                ),
                                 const SizedBox(width: 8),
-
-                                _buildOption(context, controller, question.options[1], index: 1),
+                                Expanded(
+                                  child: _buildOption(context, controller, question.options[1], index: 1, maxWidth: (containerWidth - 8) / 2),
+                                ),
                               ],
                             ),
-
                             const SizedBox(height: 8),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                _buildOption(context, controller, question.options[2], index: 2),
-
+                                Expanded(
+                                  child: _buildOption(context, controller, question.options[2], index: 2, maxWidth: (containerWidth - 8) / 2),
+                                ),
                                 const SizedBox(width: 8),
-                                
-                                _buildOption(context, controller, question.options[3], index: 3),
+                                Expanded(
+                                  child: _buildOption(context, controller, question.options[3], index: 3, maxWidth: (containerWidth - 8) / 2),
+                                ),
                               ],
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 20),
-
                         if (controller.isAnswered)
                           Padding(
                             padding: const EdgeInsets.only(top: 8),
@@ -174,13 +180,11 @@ class TebakHurufGame extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                           ),
-
                         const Spacer(),
-
                         Padding(
                           padding: const EdgeInsets.only(top: 24),
                           child: SizedBox(
-                            width: 330,
+                            width: containerWidth,
                             height: 50,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -191,35 +195,35 @@ class TebakHurufGame extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                            onPressed: controller.isAnswered
-                              ? () {
-                                  if (controller.currentIndex < controller.questions.length - 1) {
-                                    controller.currentIndex++;
-                                    controller.selectedAnswer = null;
-                                    controller.notifyListeners();
-                                  } else {
-                                    controller.isFinished = true;
-                                    Future.delayed(Duration(milliseconds: 100), () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ResultScreen(
-                                            score: controller.score,
-                                            totalQuestions: controller.questions.length,
-                                            benar: controller.correctAnswers,
-                                            onRetry: () {
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(builder: (_) => const TebakHurufGame()),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      );
-                                    });
-                                  }
-                                }
-                              : null, // Disable jika belum dijawab
+                              onPressed: controller.isAnswered
+                                  ? () {
+                                      if (controller.currentIndex < controller.questions.length - 1) {
+                                        controller.currentIndex++;
+                                        controller.selectedAnswer = null;
+                                        controller.notifyListeners();
+                                      } else {
+                                        controller.isFinished = true;
+                                        Future.delayed(const Duration(milliseconds: 100), () {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ResultScreen(
+                                                score: controller.score,
+                                                totalQuestions: controller.questions.length,
+                                                benar: controller.correctAnswers,
+                                                onRetry: () {
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(builder: (_) => const TebakHurufGame()),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                      }
+                                    }
+                                  : null,
                               child: const Text(
                                 'Lanjut',
                                 style: TextStyle(
@@ -245,7 +249,7 @@ class TebakHurufGame extends StatelessWidget {
   }
 
   void _speak(String text, FlutterTts tts) async {
-    await tts.setLanguage("ar"); // atau "id" untuk Indonesia
+    await tts.setLanguage("ar");
     await tts.setPitch(1.0);
     await tts.speak(text);
   }
@@ -255,63 +259,65 @@ class TebakHurufGame extends StatelessWidget {
     TebakHurufViewmodel controller,
     String option, {
     required int index,
+    double? maxWidth,
   }) {
     final bool isAnswered = controller.isAnswered;
     final String correctAnswer = controller.currentQuestion.correctAnswer;
     final String? selected = controller.selectedAnswer;
 
-    Color bgColor = const Color.fromRGBO(224, 224, 224, 1); // Default abu-abu
+    Color bgColor = const Color.fromRGBO(224, 224, 224, 1);
 
     if (isAnswered) {
       if (option == correctAnswer) {
-        bgColor = const Color.fromRGBO(90, 193, 120, 1); // Hijau
+        bgColor = const Color.fromRGBO(90, 193, 120, 1);
       } else if (option == selected) {
-        bgColor = const Color.fromRGBO(242, 125, 125, 1); // Merah
+        bgColor = const Color.fromRGBO(242, 125, 125, 1);
       }
     }
 
-    return GestureDetector(
-      onTap: isAnswered
-          ? null
-          : () {
-              controller.answer(option);
-            },
-      child: Container(
-        width: 161,
-        height: 100,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Stack(
-          children: [
-            // Huruf A, B, C, D di pojok kiri atas
-            Positioned(
-              top: 8,
-              left: 12,
-              child: Text(
-                '${String.fromCharCode(65 + index)}.',
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
+    return SizedBox(
+      width: maxWidth,
+      height: 100,
+      child: GestureDetector(
+        onTap: isAnswered
+            ? null
+            : () {
+                controller.answer(option);
+              },
+        child: Container(
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Stack(
+            children: [
 
-            // Jawaban di tengah container
-            Center(
-              child: Text(
-                option,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: isArabic(option) ? 40 : 20,
-                  fontWeight: FontWeight.w600,
+              Positioned(
+                top: 8,
+                left: 12,
+                child: Text(
+                  '${String.fromCharCode(65 + index)}.',
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-          ],
+
+              Center(
+                child: Text(
+                  option,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: isArabic(option) ? 40 : 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
